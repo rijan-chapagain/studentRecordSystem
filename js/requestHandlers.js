@@ -81,6 +81,36 @@ response.end();
 }
 
 /**
+ * sends status report to server and display html for on client side
+ * ask user to enter degree to view details about it
+ * 
+ * @param {object} request 
+ * @param {object} response 
+ * @param {object} postData 
+ */
+function reqView(request, response, postData){
+    console.log("Request handler 'View' was called.");
+
+    var body = '<html>'+
+    '<head>'+
+    '<meta http-equiv="Content-Type" content="text/html; '+
+    'charset=UTF-8" />'+
+    '</head>'+
+    '<body>'+
+        '<form action="/start" enctype="multipart/form-data" method="POST">' +
+            'Degree: <input type="text" name="degree" required><br>' +
+            '<input type="submit" name="submit" value="Submit">'+
+            '<input type="reset" name="reset" value="Reset">'+          
+        '</form>'+
+    '</body>'+
+    '</html>';
+
+response.writeHead( 200, {"Content-Type": "text/plain"} );
+response.write(body);
+response.end();
+}
+
+/**
  * reqUpload sends a status report as a response to the client and server
  * formidable is use to parse form data (file uploads)
  * 
