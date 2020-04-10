@@ -18,18 +18,16 @@
     </head>
 
     <body>
-        <header> </header>
-        <div class="entryForm">
-            <form action="#" method="POST">
-                Student Form: <input type="radio" name="degree" ><br>
-                View Details: <input type="radio" name="degree" ><br>
-                Upload Image: <input type="radio" name="degree" ><br>
-                <input type="submit" name="submit" value="Submit">
-                <input type="reset" name="reset" value="Reset"><br>             
-            </form>
-        </div>
-<!-- 
-        <form action="#" method="POST">
+        <header><b>Welcome</b></header>
+        <form id="start" action="#" method="POST">
+            Student Form: <input type="radio" name="degree" ><br>
+            View Details: <input type="radio" name="degree" ><br>
+            Upload Image: <input type="radio" name="degree" ><br>
+            <input type="submit" name="submit" value="Submit">
+            <input type="reset" name="reset" value="Reset"><br>             
+        </form>
+
+        <form id="student" action="#" method="POST">
             Student ID: <input type="Number" id="stdID" name="stdID" min="30000000" max="55000000" required><br>
             First Name: <input type="text" name="fName" required><br>
             Last Name: <input type="text" name="lName" required><br>
@@ -38,7 +36,14 @@
             Degree: <input type="text" name="degree" required><br>
             <input type="submit" name="submit" value="Submit"> 
             <input type="reset" name="reset" value="Reset">      
-        </form> -->
+        </form>
+
+        <form action="/start" enctype="multipart/form-data" method="POST">
+            Degree: <input type="text" name="degree" required><br>
+            <input type="submit" name="submit" value="Submit"> 
+            <input type="reset" name="reset" value="Reset">      
+        </form>
+
     </body>
 
     <!--build:js js/main.js -->
