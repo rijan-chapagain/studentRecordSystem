@@ -9,6 +9,10 @@ var handle = {};
 // object property which points to an appropriate request handler
 handle["/"] = requestHandlers.reqStart;
 handle["/start"] = requestHandlers.reqStart;
+handle["/student"] = requestHandlers.reqStudent;
+// handle["/option"] = requestHandlers.reqOption;
+
+handle["/view"] = requestHandlers.reqView;
 handle["/upload"] = requestHandlers.reqUpload;
 handle["/show"] = requestHandlers.reqShow;
 
