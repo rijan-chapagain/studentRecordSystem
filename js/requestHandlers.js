@@ -2,6 +2,7 @@
 var http = require('http');
 var formidable = require('formidable');
 var fs = require('fs');
+var qs = require('querystring');
 
 /**
  * reqStart sends status report to server and display html form on client 
@@ -20,30 +21,57 @@ function reqStart(request, response, postData){
             throw err; 
         }       
    
-    var body = '<html>'+
-        '<head>'+
-        '<meta http-equiv="Content-Type" content="text/html; '+
-        'charset=UTF-8" />'+
-        '</head>'+
-        '<body>'+
-        '<form action="/student" enctype="multipart/form-data" method="POST">' +
-        'Input Student Details: <input type="radio" name="degree" ><br>'+
-        'View Details: <input type="radio" name="degree" ><br>'+
-        'Upload Image: <input type="radio" name="degree" ><br>'+
-        '<input type="submit" name="submit" value="Submit">'+
-        '<input type="reset" name="reset" value="Reset">'+          
-        '</form>'+
-        '</body>'+
-        '</html>';
+    // var body = '<html>'+
+    //     '<head>'+
+    //     '<meta http-equiv="Content-Type" content="text/html; '+
+    //     'charset=UTF-8" />'+
+    //     '</head>'+
+    //     '<body>'+
+    //     '<form action="/student" enctype="multipart/form-data" method="POST">' +
+    //     'Input Student Details: <input type="radio" name="degree" ><br>'+
+    //     'View Details: <input type="radio" name="degree" ><br>'+
+    //     'Upload Image: <input type="radio" name="degree" ><br>'+
+    //     '<input type="submit" name="submit" value="Submit">'+
+    //     '<input type="reset" name="reset" value="Reset">'+          
+    //     '</form>'+
+    //     '</body>'+
+    //     '</html>';
     // var start = document.getElementById('start')
     // var student = document.getElementById('student')
 
-    response.writeHead( 200, {"Content-Type": "text/plain"} );
-    response.write(body);
+    
+
+    response.writeHead( 200, {"Content-Type": "text/html"} );
+    response.write(html);
     response.end();
-});
+    });
+
+    if(request.method == 'POST'){
+        var inp = "";
+        //event listener 
+        request.on('data', (data) => {
+            inp += data;
+        });
+        //data processing after 'end' the user input data
+        request.on('end', () => {
+            var parseData = qs.parse(inp);
+
+            console.log("data: " + parseData.upload);
+        });
+        request.on('err', (err) =>{
+            console.log("error on parsing data..");
+        });
+    }
+    else{
+        console.log("Not post data.");
+    }
 }
 
+// function reqOption(request, response){
+//     console.log("Request handler 'option' is processing.");
+
+
+// }
 
 /**
  * sends status report to server and display html for on client side
@@ -58,8 +86,8 @@ function reqStudent(request, response, postData){
 
     var body = '<html>'+
     '<head>'+
-    '<meta http-equiv="Content-Type" content="text/html; '+
-    'charset=UTF-8" />'+
+    '<meta http-equiv="Content-Type" content="text/html"'+
+    'charset="UTF-8" />'+
     '</head>'+
     '<body>'+
         '<form action="/start" enctype="multipart/form-data" method="POST">' +
@@ -75,7 +103,7 @@ function reqStudent(request, response, postData){
     '</body>'+
     '</html>';
 
-response.writeHead( 200, {"Content-Type": "text/plain"} );
+response.writeHead( 200, {"Content-Type": "text/html"} );
 response.write(body);
 response.end();
 }
@@ -93,8 +121,8 @@ function reqView(request, response, postData){
 
     var body = '<html>'+
     '<head>'+
-    '<meta http-equiv="Content-Type" content="text/html; '+
-    'charset=UTF-8" />'+
+    '<meta http-equiv="Content-Type" content="text/html" '+
+    'charset= "UTF-8" />'+
     '</head>'+
     '<body>'+
         '<form action="/start" enctype="multipart/form-data" method="POST">' +
@@ -105,7 +133,7 @@ function reqView(request, response, postData){
     '</body>'+
     '</html>';
 
-response.writeHead( 200, {"Content-Type": "text/plain"} );
+response.writeHead( 200, {"Content-Type": "text/html"} );
 response.write(body);
 response.end();
 }
@@ -124,7 +152,7 @@ function reqUpload(request, response) {
    
     var form = new formidable.IncomingForm();
    
-    form.uploadDir = './tmp'; // must include this line    
+    form.uploadDir = '../tmp'; // must include this line    
     
 
     form.parse(request, function(err, field, file) {
@@ -132,19 +160,10 @@ function reqUpload(request, response) {
         console.log('fields:', field);
         console.log('files:', file);
 
-        // tried to rename to an already existing file
-        fs.rename(file.upload.path, "./test.png",function(err){
-            if (err)
-            {
-                fs.unlink("./test.png");
-                fs.rename(file.upload.path,"./test.png");
-            }
-
-            response.writeHead(200, {"Content-Type": "text/html"});
-            response.write("Received image:<br/>");
-            response.write("<img src='/show' />");
-            response.end();
-        });
+        response.writeHead(200, {"Content-Type": "text/html"});
+        response.write("Received image:<br/>");
+        response.write("<img src='/show' />");
+        response.end();
     });
 }
 
@@ -159,32 +178,13 @@ function reqShow(request, response, postData)
 {
     console.log("Request handler 'show' was called.");
     response.writeHead(200, {"Content-Type": "image/png"});
-    fs.createReadStream("./test.png").pipe(response);
+    fs.createReadStream("../img/fun.png").pipe(response);
 }
-
-/**
-// alternative code for the show function
-function reqShow(response, postData) {
-    console.log("Request handler 'show' was called.");
-    response.writeHead(200, {"Content-Type": "image/png"});
-    // open file for a readable stream
-    var readStream = fs.createReadStream("./test.png");
-    // wait until we know the readable stream is valid
-    readStream.on('open', function() {
-    // pipe read stream to response object (goes to client)
-    readStream.pipe(response);
-    });
-    // catches errors (if any)
-    readStream.on('error', function(err) {
-    readStream.end(err);
-    });
-}
-*/
 
 //allow access on reqStart & reqUpload to other files
 exports.reqStart = reqStart;
 exports.reqStudent = reqStudent;
-exports.reqOption = reqOption;
+// exports.reqOption = reqOption;
 
 exports.reqView = reqView;
 exports.reqUpload = reqUpload;
