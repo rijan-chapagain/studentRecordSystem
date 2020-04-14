@@ -1,8 +1,9 @@
 // var exec = require("child_process").exec;
-var http = require('http');
+const http = require('http');
 var formidable = require('formidable');
 var fs = require('fs');
-var qs = require('querystring');
+const { parse } = require('querystring');
+// var csv = require('csv');
 
 /**
  * reqStart sends status report to server and display html form on client 
@@ -11,67 +12,83 @@ var qs = require('querystring');
  * 
  * @param {object} request 
  * @param {object} response 
- * @param {object} postData 
  */
-function reqStart(request, response, postData){
+function reqStart(request, response){
     console.log("Request handler 'start' was called.");
 
-    fs.readFile('../index.html', function (err, html) {
+    fs.readFile('../html/start.html', function (err, html) {
         if (err) {
             throw err; 
-        }       
-   
-    // var body = '<html>'+
-    //     '<head>'+
-    //     '<meta http-equiv="Content-Type" content="text/html; '+
-    //     'charset=UTF-8" />'+
-    //     '</head>'+
-    //     '<body>'+
-    //     '<form action="/student" enctype="multipart/form-data" method="POST">' +
-    //     'Input Student Details: <input type="radio" name="degree" ><br>'+
-    //     'View Details: <input type="radio" name="degree" ><br>'+
-    //     'Upload Image: <input type="radio" name="degree" ><br>'+
-    //     '<input type="submit" name="submit" value="Submit">'+
-    //     '<input type="reset" name="reset" value="Reset">'+          
-    //     '</form>'+
-    //     '</body>'+
-    //     '</html>';
-    // var start = document.getElementById('start')
-    // var student = document.getElementById('student')
-
-    
-
-    response.writeHead( 200, {"Content-Type": "text/html"} );
-    response.write(html);
-    response.end();
+        }               
+        response.writeHead( 200, {"Content-Type": "text/html"} );
+        response.write(html);
+        response.end();
     });
-
-    if(request.method == 'POST'){
-        var inp = "";
-        //event listener 
-        request.on('data', (data) => {
-            inp += data;
-        });
-        //data processing after 'end' the user input data
-        request.on('end', () => {
-            var parseData = qs.parse(inp);
-
-            console.log("data: " + parseData.upload);
-        });
-        request.on('err', (err) =>{
-            console.log("error on parsing data..");
-        });
-    }
-    else{
-        console.log("Not post data.");
-    }
 }
 
-// function reqOption(request, response){
-//     console.log("Request handler 'option' is processing.");
+/**
+ * 
+ * 
+ * @param {object} request 
+ * @param {object} response 
+ */
+function reqCheck(request, response){
+    console.log("Request handler 'check' is processing.");
+   
+    function collectRequestData(request, callback) {
+        const FORM_URLENCODED = 'application/x-www-form-urlencoded';
+        if(request.headers['content-type'] === FORM_URLENCODED) {
+            
+            let body = [];
 
+            response.on('error', (err) => {
+                console.error(err);
+            });
 
-// }
+            request.on('data', (chunk) => {
+                body += chunk.toString(); //convert buffer to string
+            });
+
+            // response.writeHead(200.(content-type text/html))
+
+            request.on('end', () => {
+                callback(parse(body))
+                // response.end('ok, You all set!');
+
+            //     response.on('error', (err) => {
+            //     console.error(err);
+            // });
+    
+            });
+        }
+        else{
+            callback(null);
+        }
+    }
+
+    collectRequestData(request, result => {
+        console.log(result);
+        // response.end(`Parsed data belonging to ${result.three}`);
+        
+        if(`${result.one}`=== "student"){
+            console.log("student is called");
+            reqStudent(request, response);
+        }
+        else if(`${result.two}`=== "view"){
+            console.log("view is called");
+            reqView(request,response);
+        }
+        else if(`${result.three}`=== "upload"){
+            console.log("upload is called");
+            reqUpload(request, response);
+        }
+        else{
+            response.end("Please select atleast one option at a time.");
+        }
+
+    });
+    // reqStart();
+}
 
 /**
  * sends status report to server and display html for on client side
@@ -79,33 +96,19 @@ function reqStart(request, response, postData){
  * 
  * @param {object} request 
  * @param {object} response 
- * @param {object} postData 
  */
-function reqStudent(request, response, postData){
+function reqStudent(request, response){
     console.log("Request handler 'student' was called.");
 
-    var body = '<html>'+
-    '<head>'+
-    '<meta http-equiv="Content-Type" content="text/html"'+
-    'charset="UTF-8" />'+
-    '</head>'+
-    '<body>'+
-        '<form action="/start" enctype="multipart/form-data" method="POST">' +
-            'Student ID: <input type="Number" id="stdID" name="stdID" min="30000000" max="55000000" required><br>'+
-            'First Name: <input type="text" name="fName" required><br>'+
-            'Last Name: <input type="text" name="lName" required><br>'+
-            'Age: <input type="number" name="age" min="10" max="99" required><br>'+
-            'Gender: <input type="radio" name="gender" required>Male <input type="radio" name="gender" required>Female<br>'+
-            'Degree: <input type="text" name="degree" required><br>' +
-            '<input type="submit" name="submit" value="Submit">'+
-            '<input type="reset" name="reset" value="Reset">'+          
-        '</form>'+
-    '</body>'+
-    '</html>';
+    fs.readFile('../html/student.html', function (err, student) {
+        if (err) {
+            throw err; 
+        }       
 
-response.writeHead( 200, {"Content-Type": "text/html"} );
-response.write(body);
-response.end();
+    response.writeHead( 200, {"Content-Type": "text/html"} );
+    response.write(student);
+    response.end();
+    });
 }
 
 /**
@@ -114,29 +117,35 @@ response.end();
  * 
  * @param {object} request 
  * @param {object} response 
- * @param {object} postData 
  */
-function reqView(request, response, postData){
+function reqView(request, response){
     console.log("Request handler 'View' was called.");
 
-    var body = '<html>'+
-    '<head>'+
-    '<meta http-equiv="Content-Type" content="text/html" '+
-    'charset= "UTF-8" />'+
-    '</head>'+
-    '<body>'+
-        '<form action="/start" enctype="multipart/form-data" method="POST">' +
-            'Degree: <input type="text" name="degree" required><br>' +
-            '<input type="submit" name="submit" value="Submit">'+
-            '<input type="reset" name="reset" value="Reset">'+          
-        '</form>'+
-    '</body>'+
-    '</html>';
+    fs.readFile('../html/view.html', function (err, view) {
+        if (err) {
+            throw err; 
+        }       
 
-response.writeHead( 200, {"Content-Type": "text/html"} );
-response.write(body);
-response.end();
+    response.writeHead( 200, {"Content-Type": "text/html"} );
+    response.write(view);
+    response.end();
+    });
 }
+
+/**
+ * It will display the requested details of degree
+ * 
+ * @param {object} request 
+ * @param {object} response 
+ */
+function reqDisplay(request, response){
+    console.log("Request handler 'View' was called.");
+
+    response.writeHead( 200, {"Content-Type": "text/html"} );
+    response.write("Yopur Result will display here!");
+    response.end();
+}
+
 
 /**
  * reqUpload sends a status report as a response to the client and server
@@ -148,17 +157,25 @@ response.end();
  */
 function reqUpload(request, response) {
     console.log("Request handler 'upload' was called.");
-    console.log("... about to parse ...");
-   
+    
     var form = new formidable.IncomingForm();
    
-    form.uploadDir = '../tmp'; // must include this line    
-    
+    fs.readFile('../html/upload.html', function (err, html) {
+        if (err) {
+            throw err; 
+        }       
 
-    form.parse(request, function(err, field, file) {
+    response.writeHead( 200, {"Content-Type": "text/html"} );
+    response.write(html);
+    response.end();
+    });
+
+    form.uploadDir = '../tmp'; // must include this line    
+
+    form.parse(request, function(err, fields, files) {
         console.log("parsing done");
-        console.log('fields:', field);
-        console.log('files:', file);
+        console.log('fields:', fields);
+        console.log('files:', files);
 
         response.writeHead(200, {"Content-Type": "text/html"});
         response.write("Received image:<br/>");
@@ -174,7 +191,7 @@ function reqUpload(request, response) {
  * @param {object} response 
  * @param {object} postData 
  */
-function reqShow(request, response, postData) 
+function reqShow(request, response) 
 {
     console.log("Request handler 'show' was called.");
     response.writeHead(200, {"Content-Type": "image/png"});
@@ -183,9 +200,12 @@ function reqShow(request, response, postData)
 
 //allow access on reqStart & reqUpload to other files
 exports.reqStart = reqStart;
+
 exports.reqStudent = reqStudent;
-// exports.reqOption = reqOption;
+exports.reqCheck = reqCheck;
 
 exports.reqView = reqView;
+exports.reqDisplay = reqDisplay;
+
 exports.reqUpload = reqUpload;
 exports.reqShow = reqShow;
