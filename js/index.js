@@ -1,23 +1,26 @@
 // import our exported modules
 var server = require("./server");
 var router = require("./router");
-var requestHandlers = require("./requestHandlers");
+var start = require("./requestHandlers/start");
+var student = require("./requestHandlers/student");
+var view = require("./requestHandlers/view");
+var upload = require("./requestHandlers/upload");
 
 // create ‘handle’ object literal
 var handle = {};
 // using the associative array notation, each array index is an
 // object property which points to an appropriate request handler
-handle["/"] = requestHandlers.reqStart;
-handle["/start"] = requestHandlers.reqStart;
+handle["/"] = start.reqStart;
+handle["/start"] = start.reqStart;
+handle["/check"] = start.reqCheck;
 
-handle["/student"] = requestHandlers.reqStudent;
-handle["/check"] = requestHandlers.reqCheck;
+handle["/student"] = student.reqStudent;
 
-handle["/view"] = requestHandlers.reqView;
-handle["/display"] = requestHandlers.reqDisplay;
+handle["/view"] = view.reqView;
+handle["/display"] = view.reqDisplay;
 
-handle["/upload"] = requestHandlers.reqUpload;
-handle["/show"] = requestHandlers.reqShow;
+handle["/upload"] = upload.reqUpload;
+handle["/show"] = upload.reqShow;
 
 
 //***JSON format***
@@ -31,5 +34,3 @@ handle["/show"] = requestHandlers.reqShow;
 // pass the route() function associated with the router object as its parameter
 // pass handle object to server
 server.startServer(router.route, handle)
-
-
