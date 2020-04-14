@@ -7,7 +7,7 @@ var url = require("url"); // import url core modules
  * @param {Function} route 
  * @param {object} handle 
  */
-function startServer(route, handle, request, postData)
+function startServer(route, handle, request)
 {
       /**
        * use url module to get pathname of requested resource 
@@ -17,20 +17,18 @@ function startServer(route, handle, request, postData)
        * 
        * @param {obj} request 
        * @param {obj} response 
-       * @param {obj} postData 
        */
-      function onRequest(request, response, postData) 
+      function onRequest(request, response) 
       {
             var pathname = url.parse(request.url).pathname;
 
-            console.log("Request for " + pathname + " received.");
+            console.log(`${request.method} request for ${pathname}  received.`);
             
-            route(pathname, handle, request, response, postData);
-
+            route(pathname, handle, request, response);
       }
       http.createServer(onRequest).listen(40310,'localhost');
             console.log("Server has started.");
 }
-
 //allow access to other files
 exports.startServer = startServer;
+

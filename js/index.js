@@ -9,10 +9,13 @@ var handle = {};
 // object property which points to an appropriate request handler
 handle["/"] = requestHandlers.reqStart;
 handle["/start"] = requestHandlers.reqStart;
+
 handle["/student"] = requestHandlers.reqStudent;
-// handle["/option"] = requestHandlers.reqOption;
+handle["/check"] = requestHandlers.reqCheck;
 
 handle["/view"] = requestHandlers.reqView;
+handle["/display"] = requestHandlers.reqDisplay;
+
 handle["/upload"] = requestHandlers.reqUpload;
 handle["/show"] = requestHandlers.reqShow;
 
@@ -28,4 +31,5 @@ handle["/show"] = requestHandlers.reqShow;
 // pass the route() function associated with the router object as its parameter
 // pass handle object to server
 server.startServer(router.route, handle)
+
 
