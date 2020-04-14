@@ -1,9 +1,13 @@
 // var exec = require("child_process").exec;
 const http = require('http');
+// var csv = require('csv');
+const csv = require('csv-parser');
+
 var formidable = require('formidable');
 var fs = require('fs');
 const { parse } = require('querystring');
-// var csv = require('csv');
+// const obj = csv(); 
+// gets the csv module to access the required functionality
 
 /**
  * reqStart sends status report to server and display html form on client 
@@ -27,7 +31,7 @@ function reqStart(request, response){
 }
 
 /**
- * 
+ * Check is checking the incoming values using formidable
  * 
  * @param {object} request 
  * @param {object} response 
@@ -83,11 +87,11 @@ function reqCheck(request, response){
             reqUpload(request, response);
         }
         else{
-            response.end("Please select atleast one option at a time.");
+            // alert("Nothing has been selected!!");
+            console.log("Nothing has been selected!!");
+            reqStart(request,response);
         }
-
     });
-    // reqStart();
 }
 
 /**
@@ -141,9 +145,20 @@ function reqView(request, response){
 function reqDisplay(request, response){
     console.log("Request handler 'View' was called.");
 
-    response.writeHead( 200, {"Content-Type": "text/html"} );
-    response.write("Yopur Result will display here!");
-    response.end();
+    fs.createReadStream('../data/stInfo.csv')
+        .pipe(csv())
+        .on('data', (row) => {
+        
+
+            response.writeHead(200, { 'content-type': 'application/json' });
+            response.end(JSON.stringify(row));
+        })
+        .on('end', () => {
+            console.log('CSV file successfully processed');
+    });
+
+    // response.writeHead(200, { 'content-type': 'application/json' });
+    // response.end(JSON.stringify(MyData));
 }
 
 
@@ -200,10 +215,10 @@ function reqShow(request, response)
 
 //allow access on reqStart & reqUpload to other files
 exports.reqStart = reqStart;
-
-exports.reqStudent = reqStudent;
 exports.reqCheck = reqCheck;
 
+exports.reqStudent = reqStudent;
+ 
 exports.reqView = reqView;
 exports.reqDisplay = reqDisplay;
 
