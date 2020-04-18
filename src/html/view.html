@@ -7,32 +7,35 @@
         <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
         <meta content="utf-8" http-equiv="encoding" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">        
-        
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">  
+              
+        <title>view Data</title>
+
         <!--build:css-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <!-- Custom CSS -->
         <!-- <link rel="stylesheet" type="text/css" href="css/styles.css" /> -->
 
         <!-- endbuild -->
-        <title>Assignment-1</title>
     </head>
 
     <body>
-        <header><b>Welcome</b></header>
-        <form action="/display" enctype="multipart/form-data" method="POST">
+        <h2>Welcome</h2>
+        <form action="/display" method="POST">
             Degree: <input list="degree">
             <datalist id="degree">
-              <option value="Computer Science">
-              <option value="Game Development">
-              <option value="Mobile & Web app development">
-              <option value="Networking">
-              <option value="Cyber Security">
+                <option value="Computer Science">
+                <option value="Game Development">
+                <option value="Mobile & Web app development">
+                <option value="Networking">
+                <option value="Cyber Security">
             </datalist>
-            <input type="submit" name="submit" value="Submit" > 
+            <input type="submit" id="submit" name="submit" value="Submit" > 
             <input type="reset" name="reset" value="Reset">      
         </form>
+        <hr>
     </body>
-
-    </script>
-    
 </html>
+    
