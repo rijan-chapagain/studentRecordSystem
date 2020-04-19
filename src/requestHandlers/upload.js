@@ -1,7 +1,6 @@
 const http = require('http');
 var formidable = require('formidable');
 var fs = require('fs');
-const { parse } = require('querystring');
 
 /**
  * reqUpload sends a status report as a response to the client and server
@@ -13,9 +12,7 @@ const { parse } = require('querystring');
  */
 function reqUpload(request, response) {
     console.log("Request handler 'upload' was called.");
-    
-    var form = new formidable.IncomingForm();
-   
+       
     fs.readFile('./html/upload.html', function (err, html) {
         if (err) {
             throw err; 
@@ -26,18 +23,8 @@ function reqUpload(request, response) {
     response.end();
     });
 
-    form.uploadDir = '../tmp'; // must include this line    
+   
 
-    form.parse(request, function(err, fields, files) {
-        console.log("parsing done");
-        console.log('fields:', fields);
-        console.log('files:', files);
-
-        response.writeHead(200, {"Content-Type": "text/html"});
-        response.write("Received image:<br/>");
-        response.write("<img src='/show' />");
-        response.end();
-    });
 }
 
 /**
@@ -50,10 +37,42 @@ function reqUpload(request, response) {
 function reqShow(request, response) 
 {
     console.log("Request handler 'show' was called.");
-    response.writeHead(200, {"Content-Type": "image/png"});
-    fs.createReadStream("../img/fun.png").pipe(response);
+
+    var form = new formidable.IncomingForm();
+    form.uploadDir = '../tmp';
+
+    
+    form.parse(request, function(err, field, file) {
+        console.log("parsing done");
+        console.log('fields:', field);
+        console.log('files:', file);
+
+        // var receivedImg = form.upload.path;
+        // console.log(receivedImg);
+        
+        var fName = file.upload.name;
+        var pathName = `../tmp/${fName}`;
+        console.log(fName);
+
+        fs.rename(file.upload.path, pathName, (err) => {
+            if (err) throw err;
+            // fs.stat('/tmp/hello', (err, stats) => {
+            //   if (err) throw err;
+            //   console.log(`stats: ${JSON.stringify(stats)}`);
+            // });
+          });
+    
+        response.writeHead(200, {"Content-Type": "text/html"});    
+        response.write("Received image:<br/>");
+        // response.end(`<img src= ${pathname} />`);
+
+    // response.writeHead(200, {"Content-Type": "image/jpg"});
+    // fs.createReadStream(`../tmp/pkr1.jpg`).pipe(response);
+    response.end();
+    });
 }
 
 //allow access on reqStart & reqUpload to other files
 exports.reqUpload = reqUpload;
+// exports.reqStore = reqStore;
 exports.reqShow = reqShow;

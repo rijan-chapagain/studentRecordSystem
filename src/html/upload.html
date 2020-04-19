@@ -20,7 +20,9 @@
     <body>
         <header><b>Welcome to upload</b></header>
         <form action="/show" enctype="multipart/form-data" method="post">
-            <input type="file" name="upload" multiple="multiple" />
+            Choose file from local dir: <input type="file" name="upload" multiple="multiple" />
+            <!-- Choose file from remote dir: <a href="/images">click to choose pic</a> -->
+            
             <input type="submit" value="Upload file" />
         </form>
     </body>

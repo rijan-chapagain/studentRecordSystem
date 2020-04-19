@@ -5,6 +5,7 @@ var start = require("./requestHandlers/start");
 var student = require("./requestHandlers/student");
 var view = require("./requestHandlers/view");
 var upload = require("./requestHandlers/upload");
+var imageFolder = require("./requestHandlers/imageFolder");
 
 // create ‘handle’ object literal
 var handle = {};
@@ -23,6 +24,8 @@ handle["/display"] = view.reqDisplay;
 
 handle["/upload"] = upload.reqUpload;
 handle["/show"] = upload.reqShow;
+
+handle["/images"] = imageFolder.reqImages;
 
 
 //***JSON format***
