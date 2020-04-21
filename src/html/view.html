@@ -12,30 +12,129 @@
         <title>view Data</title>
 
         <!--build:css-->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
         <!-- Custom CSS -->
+        <style>
+            body{
+                font-family: Arial, Helvetica, sans-serif;
+                background-color: whitesmoke;
+                font-size: 22px;
+                line-height: 50px;
+                text-align: center;
+            }
+
+            input, .selectDegree{
+                font-size: 20px;
+            }
+
+            /* Buttons */
+            .submit {
+                background-color: #4CAF50; /* Green */
+                border: none;
+                color: white;
+                padding: 15px 32px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+            }
+
+            .reset {
+                background-color: #008CBA; /* blue */
+                border: none;
+                color: white;
+                padding: 15px 32px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+            }
+
+            /* The container */
+            .container {
+                display: block;
+                position: relative;
+                padding-left: 35px;
+                margin-bottom: 12px;
+                cursor: pointer;
+                font-size: 22px;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+
+            /* Hide the browser's default checkbox */
+            .container input {
+                position: absolute;
+                opacity: 0;
+                cursor: pointer;
+                height: 0;
+                width: 0;
+            }
+
+            .back{
+                text-align: left;
+                background-color: rgb(186, 121, 0); /* blue */
+                border: none;
+                color: white;
+                padding: 15px 32px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+                border-radius: 50%;
+            }
+            /* Thick red border */
+            hr.new4 {
+                border: 1px solid red;
+            }
+            /* footer */
+            .footer {
+                position: fixed;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                background-color: red;
+                color: white;
+                text-align: center;
+            }
+        </style>
+
         <!-- <link rel="stylesheet" type="text/css" href="css/styles.css" /> -->
 
         <!-- endbuild -->
     </head>
 
     <body>
-        <h2>Welcome</h2>
+        <h1>Welcome</h1> 
+        <a href="/start"> <input type="button" class="back" name="back" value="&#8592;Back to home"> </a> 
+        <hr class="new4"> 
         <form action="/display" method="POST">
-            Degree: <input list="degree">
-            <datalist id="degree">
-                <option value="Computer Science">
-                <option value="Game Development">
-                <option value="Mobile & Web app development">
-                <option value="Networking">
-                <option value="Cyber Security">
-            </datalist>
-            <input type="submit" id="submit" name="submit" value="Submit" > 
-            <input type="reset" name="reset" value="Reset">      
+            Select Degree: 
+            <select class="selectDegree" name="selectDegree" required>
+                <optgroup label="Select Degree">
+                    <option name="op0" value=""></option>
+                    <option name="op1" value="Computer Science">Computer Science</option>
+                    <option name="op2" value="Game Development">Game Development</option>
+                    <option name="op3" value="Mobile & Web app development">Mobile & Web app development</option>
+                    <option name="op4" value="Networking">Networking</option>
+                    <option name="op5" value="Cyber Security">Cyber Security</option>
+                </optgroup>
+            </select>
+            <input type="submit" class="submit" id="submit" name="submit" value="Submit" > 
+            <input type="reset" class="reset" name="reset" value="Reset">      
         </form>
         <hr>
     </body>
+    <div class="footer">
+        <p>copyright act: &copy; 2020 Rijan Chapagain</p>
+    </div>
 </html>
     

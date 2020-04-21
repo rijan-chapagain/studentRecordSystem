@@ -11,7 +11,7 @@
         
         <!--build:css-->
         <!-- Custom CSS -->
-        <link rel="stylesheet" type="text/css" href="../css/styles.css" />
+        <!-- <link rel="stylesheet" type="text/css" href="../css/styles.css" /> -->
 
         <style>
             body{
@@ -19,6 +19,7 @@
                 background-color: whitesmoke;
                 text-align: center;
             }
+
             /* Buttons */
             .submit {
                 background-color: #4CAF50; /* Green */
@@ -48,79 +49,79 @@
 
             /* The container */
             .container {
-            display: block;
-            position: relative;
-            padding-left: 35px;
-            margin-bottom: 12px;
-            cursor: pointer;
-            font-size: 22px;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
+                display: block;
+                position: relative;
+                padding-left: 35px;
+                margin-bottom: 12px;
+                cursor: pointer;
+                font-size: 22px;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
             }
 
             /* Hide the browser's default checkbox */
             .container input {
-            position: absolute;
-            opacity: 0;
-            cursor: pointer;
-            height: 0;
-            width: 0;
+                position: absolute;
+                opacity: 0;
+                cursor: pointer;
+                height: 0;
+                width: 0;
             }
 
             /* Create a custom checkbox */
             .checkmark {
-            position: absolute;
-            top: 0;
-            right: 300px;
-            height: 25px;
-            width: 25px;
-            background-color: rgb(180, 176, 176);
+                position: absolute;
+                top: 0;
+                right: 300px;
+                height: 25px;
+                width: 25px;
+                background-color: rgb(180, 176, 176);
             }
 
             /* On mouse-over, add a grey background color */
             .container:hover input ~ .checkmark {
-            background-color: #ccc;
+                background-color: #ccc;
             }
 
             /* When the checkbox is checked, add a blue background */
             .container input:checked ~ .checkmark {
-            background-color: #2196F3;
+                background-color: #2196F3;
             }
 
             /* Create the checkmark/indicator (hidden when not checked) */
             .checkmark:after {
-            content: "";
-            position: absolute;
-            display: none;
+                content: "";
+                position: absolute;
+                display: none;
             }
 
             /* Show the checkmark when checked */
             .container input:checked ~ .checkmark:after {
-            display: block;
+              display: block;
             }
 
             /* Style the checkmark/indicator */
             .container .checkmark:after {
-            left: 9px;
-            top: 5px;
-            width: 5px;
-            height: 10px;
-            border: solid white;
-            border-width: 0 3px 3px 0;
-            -webkit-transform: rotate(45deg);
-            -ms-transform: rotate(45deg);
-            transform: rotate(45deg);
-            }
-           
-            /* Thick red border */
-            hr.new4 {
-                border: 1px solid red;
-            }
-            /* footer */
-            .footer {
-                position: fixed;
+                left: 9px;
+                top: 5px;
+                width: 5px;
+                height: 10px;
+                border: solid white;
+                border-width: 0 3px 3px 0;
+                -webkit-transform: rotate(45deg);
+                -ms-transform: rotate(45deg);
+                transform: rotate(45deg);
+                }
+            
+                /* Thick red border */
+                hr.new4 {
+                    border: 1px solid red;
+                }
+                /* footer */
+                .footer {
+                    position: fixed;
                 left: 0;
                 bottom: 0;
                 width: 100%;
@@ -135,6 +136,7 @@
 
     <body>
         <h1>Welcome</h1> 
+        <h3> &#9989; Data Successfully added to CSV file!!</h3>
         <hr class="new4"> 
         <form id="start" action="/check" method="POST">
             <label class="container">Student Form <input type="radio" name="option" value="student"><span class="checkmark"></span></label><br>
@@ -147,5 +149,5 @@
 
     <div class="footer">
         <p>copyright act: &copy; 2020 Rijan Chapagain</p>
-      </div>
+    </div>
 </html>

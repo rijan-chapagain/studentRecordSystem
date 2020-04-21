@@ -8,24 +8,102 @@
         <meta content="utf-8" http-equiv="encoding" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">        
-        
+    
         <!--build:css-->
         <!-- Custom CSS -->
         <!-- <link rel="stylesheet" type="text/css" href="css/styles.css"/> -->
+        <style>
+            body{
+                font-family: Arial, Helvetica, sans-serif;
+                background-color: whitesmoke;
+                font-size: 22px;
+                line-height: 50px;
+                text-align: center;
+            }
+
+            input, .selectDegree{
+                font-size: 20px;
+            }
+
+            /* Buttons */
+            .submit {
+                background-color: #4CAF50; /* Green */
+                border: none;
+                color: white;
+                padding: 15px 32px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+            }
+
+            .reset {
+                background-color: #008CBA; /* blue */
+                border: none;
+                color: white;
+                padding: 15px 32px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+            }
+
+            .back{
+                text-align: left;
+                background-color: rgb(186, 121, 0); /* blue */
+                border: none;
+                color: white;
+                padding: 15px 32px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+                border-radius: 50%;
+            }
+
+            #student{
+                text-align: left;
+                margin-left: 700px;
+            }
+            
+            /* Thick red border */
+            hr.new4 {
+                border: 1px solid red;
+            }
+            /* footer */
+            .footer {
+                position: fixed;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                background-color: red;
+                color: white;
+                text-align: center;
+            }
+        </style>
         <!-- endbuild -->
         <title>Assignment-1</title>
     </head>
 
     <body>
-        <header><b>Welcome</b></header>
-        <form action="/import" method="POST">
-            Student ID: <input type="Number" id="stID" name="stID" min="30000000" max="55000000" ><br>
-            First Name: <input type="text" name="fName"  required><br>
-            Last Name: <input type="text" name="lName" value="last name" required><br>
-            Age: <input type="number" name="age" min="10" max="99" ><br>
-            Gender: <input type="radio" name="gender" value="Male" >Male <input type="radio" name="gender" value="Female">Female<br>
-            Degree: 
-            <select class="selectpicker" data-style="btn-info" name="selectDegree">
+        <h1>Welcome</h1>
+        <a href="/start"> <input type="button" class="back" name="back" value="&#8592;Back to home"> </a> 
+        <hr class="new4"> 
+        <form id="student" action="/import" method="POST">
+           <div class="form-item">
+            Student ID: <input type="Number" id="stID" name="stID" min="30000000" max="55000000" required><br>
+            First Name: <input type="text" name="fName"  style = "text-transform:capitalize;" required><br>
+            Last Name: <input type="text" name="lName" style = "text-transform:capitalize;" required><br>
+            Age: <input type="number" name="age" min="10" max="99" required><br>
+            Gender: <input type="radio" name="gender" value="Male" required>Male <input type="radio" name="gender" value="Female">Female<br>
+            Select Degree: 
+            <select class="selectDegree" name="selectDegree" required>
                 <optgroup label="Select Degree">
                     <option name="op1" value="Computer Science">Computer Science</option>
                     <option name="op2" value="Game Development">Game Development</option>
@@ -34,8 +112,13 @@
                     <option name="op5" value="Cyber Security">Cyber Security</option>
                 </optgroup>
             </select>
-            <input type="submit" name="submit" value="Submit"> 
-            <input type="reset" name="reset" value="Reset">      
+            <br/><br/>
+            <input type="submit" class="submit" name="submit" value="Submit"> 
+            <input type="reset" class="reset" name="reset" value="Reset">      
+            </div>
         </form>
     </body>
+    <div class="footer">
+        <p>copyright act: &copy; 2020 Rijan Chapagain</p>
+    </div>
 </html>
