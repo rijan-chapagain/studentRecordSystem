@@ -1,6 +1,9 @@
 const http = require('http');
 var formidable = require('formidable');
 var fs = require('fs');
+var start = require('./start');
+var pathName;
+var fName;
 
 /**
  * reqUpload sends a status report as a response to the client and server
@@ -22,9 +25,6 @@ function reqUpload(request, response) {
     response.write(html);
     response.end();
     });
-
-   
-
 }
 
 /**
@@ -50,9 +50,10 @@ function reqShow(request, response)
         // var receivedImg = form.upload.path;
         // console.log(receivedImg);
         
-        var fName = file.upload.name;
-        var pathName = `../tmp/${fName}`;
+        fName = file.upload.name;
+        pathName = `../tmp/${fName}`;
         console.log(fName);
+        console.log(pathName);
 
         fs.rename(file.upload.path, pathName, (err) => {
             if (err) throw err;
@@ -61,18 +62,43 @@ function reqShow(request, response)
             //   console.log(`stats: ${JSON.stringify(stats)}`);
             // });
           });
-    
-        response.writeHead(200, {"Content-Type": "text/html"});    
-        response.write("Received image:<br/>");
-        // response.end(`<img src= ${pathname} />`);
+    console.log(pathName);
 
-    // response.writeHead(200, {"Content-Type": "image/jpg"});
-    // fs.createReadStream(`../tmp/pkr1.jpg`).pipe(response);
-    response.end();
+        var disImage = "<!DOCTYPE html>" + 
+            "<html>" + 
+            "<head>" + 
+            " <style>"+
+            "table {font-family: arial, sans-serif; border-collapse: collapse; width: 100%;}"+
+            "td, th { border: 1px solid #dddddd; text-align: left; padding: 8px;}" +
+            "tr:nth-child(even) {background-color: #dddddd;}" +
+            "</style>"+
+            "</head>" + 
+            "<body" +
+            "<h2>Your selected image:</h2>" +
+            `<img src= "/show" alt="your fav Image" height="42" width="42">` +
+            "</body" +
+            "</html>" + 
+
+        fs.readFile(`../tmp/${fName}`, function (err, data) {
+            if (err) {
+                throw err; 
+            }       
+            // response.writeHead(200, {"Content-Type": "text/html"});
+            // response.write(disImage);
+        
+            response.writeHead(200, {"Content-Type": "image/png"}); 
+            response.write(data);
+                        response.end();
+
+            timeOut(request, response);
+
+                     
+        });
     });
 }
 
+
+
 //allow access on reqStart & reqUpload to other files
 exports.reqUpload = reqUpload;
-// exports.reqStore = reqStore;
 exports.reqShow = reqShow;
