@@ -11,6 +11,7 @@ var imageFolder = require("./requestHandlers/imageFolder");
 var handle = {};
 // using the associative array notation, each array index is an
 // object property which points to an appropriate request handler
+
 handle["/css"] = start.reqCss;
 handle["/"] = start.reqStart;
 handle["/start"] = start.reqStart;
@@ -20,22 +21,21 @@ handle["/student"] = student.reqStudent;
 handle["/import"] = student.reqImport;
 
 handle["/view"] = view.reqView;
+handle["/selectDegree"] = view.reqSelectDegree;
 handle["/display"] = view.reqDisplay;
 
 handle["/upload"] = upload.reqUpload;
 handle["/show"] = upload.reqShow;
+handle["/dispImage"] = upload.dispImage;
 
 handle["/images"] = imageFolder.reqImages;
 
-
-//***JSON format***
+// ***JSON format***
 // handle = {
 //     "/" : requestHandlers.reqStart,
 //     "/start" : requestHandlers.reqStart,
 //     "/upload" : requestHandlers.reqUpload,
-//};
+//     ""
+// };
 
-// call the startServer() function associated with the server object
-// pass the route() function associated with the router object as its parameter
-// pass handle object to server
 server.startServer(router.route, handle)

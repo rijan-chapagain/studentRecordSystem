@@ -1,5 +1,6 @@
 var http = require("http"); // import http core modules
 var url = require("url"); // import url core modules
+const fs = require("fs");
 
 /**
  * starts the server 

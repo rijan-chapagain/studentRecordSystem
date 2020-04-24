@@ -1,10 +1,10 @@
-const http = require('http');
 var fs = require('fs');
 const { parse } = require('querystring');
 var start = require('./start');
 
 /**
- * sends status report to server and display html for on client side
+ * sends status report to server 
+ * display html for on client side
  * generate a form to enter student details
  * 
  * @param {object} request 
@@ -25,7 +25,7 @@ function reqStudent(request, response){
 }
 
 /**
- * Check is checking the incoming values using formidable
+ * checking the incoming data using formidable
  * 
  * @param {object} request 
  * @param {object} response 
@@ -57,80 +57,39 @@ function reqImport(request, response){
         }
         else{
             callback(null);
-            console.log('callback is null...');
         }
     }
 
     collectRequestData(request, result => {
-        console.log(result);
-        store(request, response, result);
+        storeToCsv(request, response, result);
     });
 }
 
-function store(request, response, result){
+/**
+ * If the file exist doesnot exist, will create one
+ * If the file is null then write header
+ * Then store the form data to the file
+ * 
+ * @param {object} request 
+ * @param {object} response 
+ * @param {object} result 
+ */
+function storeToCsv(request, response, result){
      
     var studentCSVHeader ="StudentID,FirstName,LastName,Age,Gender,Degree\n"; 
     var studentCSVData = `${result.stID},${result.fName},${result.lName},${result.age},${result.gender},${result.selectDegree}\n`;
     let fd;
 
-    try {
-        if(fs.existsSync('../data/studentRecord.csv')) {
-            console.log("The file exists.");
+    fd = fs.openSync('../data/studentRecord.csv', 'a+');
+    var data = fs.readFileSync(fd,'utf8');
+    var readData = data.toString();
 
-            fd = fs.openSync('../data/studentRecord.csv', 'r');
-            fs.readFileSync(fd,'utf8');
-
-            var data = fs.readFileSync('../data/studentRecord.csv');
-            console.log(data);
-        
-            var readData = data.toString();
-            console.log(readData);
-
-            if(readData === ""){
-                console.log('file is null');
-                fs.appendFileSync("../data/studentRecord.csv", studentCSVHeader)
-                console.log('Header is successfully added');
-
-            } else{
-                console.log('is not empty');
-            }
-
-            fd = fs.openSync("../data/studentRecord.csv", 'a');
-            fs.appendFileSync(fd, studentCSVData,'utf8');
-            console.log('data successfully append');
-            start.reqStart(request, response);
-
-        } else {
-            console.log('The file does not exist.');
-
-            fd = fs.openSync("../data/studentRecord.csv", 'a');
-            fd = fs.openSync('../data/studentRecord.csv', 'r');
-            fs.readFileSync(fd,'utf8');
-
-            var data = fs.readFileSync('../data/studentRecord.csv');
-            console.log(data);
-        
-            var readData = data.toString();
-            console.log(readData);
-
-            if(readData === ""){
-                console.log('file is null');
-                fs.appendFileSync("../data/studentRecord.csv", studentCSVHeader)
-                console.log('Header is successfully added');
-
-            } else{
-                console.log('is not empty');
-            }
-
-            fd = fs.openSync("../data/studentRecord.csv", 'a');
-            fs.appendFileSync(fd, studentCSVData,'utf8');
-            console.log('data successfully append');
-           
-            start.reqStart(request, response, success);
-        }
-    } catch (err) {
-        console.error(err);
-    }        
+        if(readData === ""){
+            fs.appendFileSync("../data/studentRecord.csv", studentCSVHeader)
+        } 
+    fs.appendFileSync(fd, studentCSVData,'utf8');
+    console.log('data successfully appended to csv file');
+    start.reqStart(request, response);
 }
 
 exports.reqImport = reqImport;

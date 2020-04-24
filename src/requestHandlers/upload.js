@@ -1,13 +1,12 @@
-const http = require('http');
 var formidable = require('formidable');
 var fs = require('fs');
-var start = require('./start');
 var pathName;
 var fName;
 
 /**
- * reqUpload sends a status report as a response to the client and server
- * formidable is use to parse form data (file uploads)
+* sends status report to server 
+ * display html for on client side
+ * generate a form to upload image
  * 
  * @param {object} request 
  * @param {object} response 
@@ -21,9 +20,9 @@ function reqUpload(request, response) {
             throw err; 
         }       
 
-    response.writeHead( 200, {"Content-Type": "text/html"} );
-    response.write(html);
-    response.end();
+        response.writeHead( 200, {"Content-Type": "text/html"} );
+        response.write(html);
+        response.end();
     });
 }
 
@@ -47,58 +46,61 @@ function reqShow(request, response)
         console.log('fields:', field);
         console.log('files:', file);
 
-        // var receivedImg = form.upload.path;
-        // console.log(receivedImg);
-        
         fName = file.upload.name;
         pathName = `../tmp/${fName}`;
-        console.log(fName);
-        console.log(pathName);
 
         fs.rename(file.upload.path, pathName, (err) => {
             if (err) throw err;
-            // fs.stat('/tmp/hello', (err, stats) => {
-            //   if (err) throw err;
-            //   console.log(`stats: ${JSON.stringify(stats)}`);
-            // });
-          });
-    console.log(pathName);
+            // dispImage(request, response, fName);
+            console.log("before response");
+            var body = "<!DOCTYPE html>" + 
+                "<html>" + 
+                "<head>" + 
+                "<style>" + 
+                ".back{padding:15px 32px;color:white; background-color:rgb(186,121,0); border-radius:50%;font-size:16px; cursor:pointer;}"+
+                "h1{text-align:center;}"+
+                "</style>" + 
+                "</head>" + 
+                "<h1>Your seledted image is: </h1>" +
+                "<h3> &#9989; Congrats, your image successfully uploaded.</h3>"+
 
-        var disImage = "<!DOCTYPE html>" + 
-            "<html>" + 
-            "<head>" + 
-            " <style>"+
-            "table {font-family: arial, sans-serif; border-collapse: collapse; width: 100%;}"+
-            "td, th { border: 1px solid #dddddd; text-align: left; padding: 8px;}" +
-            "tr:nth-child(even) {background-color: #dddddd;}" +
-            "</style>"+
-            "</head>" + 
-            "<body" +
-            "<h2>Your selected image:</h2>" +
-            `<img src= "/show" alt="your fav Image" height="42" width="42">` +
-            "</body" +
-            "</html>" + 
+                '<a href="/start"> <input type="button" class="back" name="back" value="&laquo; Back to home"></a>' +       
+                `<h2>Opening up -${fName}- image.</h2>`+
+                // `<img src="/home/rijan/Desktop/ICT375/Assignments/as1/studentRecordSystem/tmp/test.png" />` +
+                // `<img src="../tmp/test.png" />` +
+                // `<img src="/requestHandlers/test.png" />` +
+                
+                "</body>" +
+                "</html>";
+                
+            response.writeHead(200, {"Content-Type": "text/html"});
+            response.write(body);
+            response.write("<h1>Testetes</h1>");
 
-        fs.readFile(`../tmp/${fName}`, function (err, data) {
-            if (err) {
-                throw err; 
-            }       
-            // response.writeHead(200, {"Content-Type": "text/html"});
-            // response.write(disImage);
-        
-            response.writeHead(200, {"Content-Type": "image/png"}); 
-            response.write(data);
-                        response.end();
 
-            timeOut(request, response);
+            response.end();
+            console.log("after response");
 
-                     
         });
     });
 }
 
-
+/**
+ * Stream the image data on behalf of reqUpload
+ * 
+ * @param {object} request
+ * @param {object} response 
+ * @param {object} imagePath 
+ */
+function dispImage(request, response, imagePath) 
+{
+    console.log(imagePath);
+    console.log("Request handler 'dispImage' was called.");
+    response.writeHead(200, {"Content-Type": "image/png"});
+    fs.createReadStream(`../tmp/${imagePath}`).pipe(response);
+}
 
 //allow access on reqStart & reqUpload to other files
 exports.reqUpload = reqUpload;
 exports.reqShow = reqShow;
+exports.dispImage = dispImage;

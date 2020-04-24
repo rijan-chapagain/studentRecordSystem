@@ -13,8 +13,8 @@ function route(pathname, handle, request, response){
     } 
     else {
         console.log("No handler found for: " + pathname);
-        response.writeHead(404, {"Content-Type": "text/plain"});
-        response.write("Resource not found!");
+        response.writeHead(404, {"Content-Type": "text/html"});
+        response.write("<h3>Sorry, Resource not found! please check your URL and try again.</h3> <br> Cheers!!");
         response.end();
     }
 }

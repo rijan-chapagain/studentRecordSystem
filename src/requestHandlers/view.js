@@ -1,12 +1,10 @@
-const http = require('http');
-var formidable = require('formidable');
 var fs = require('fs');
 const { parse } = require('querystring');
-var start = require('./start');
 
 /**
- * sends status report to server and display html for on client side
- * ask user to enter degree to view details about it
+* sends status report to server 
+ * display html for on client side
+ * generate a form to enter Degree
  * 
  * @param {object} request 
  * @param {object} response 
@@ -19,15 +17,17 @@ function reqView(request, response){
             throw err; 
         }       
 
-    response.writeHead( 200, {"Content-Type": "text/html"} );
-    response.write(view);
-    response.end();
+        response.writeHead( 200, {"Content-Type": "text/html"} );
+        response.write(view);
+        response.end();
     });
 }
 
-
 /**
- * Check is checking the incoming values using formidable
+ * read the incoming data
+ * convert buffer to string 
+ * parse the string
+ * call display function
  * 
  * @param {object} request            
  * @param {object} response 
@@ -64,111 +64,91 @@ function reqSelectDegree(request, response){
     }
 
     collectRequestData(request, result => {
-        console.log(result);
         reqDisplay(request, response, result);
     });
 }
 
 /**
- * It will display the csv file using fs and csv
+ * Display the csv file using fs and csv
  * 
  * @param {object} request 
  * @param {object} response 
+ * @param {object} result
  */
 function reqDisplay(request, response, result){
     console.log("Request handler 'display' was called."); 
+    var delimiter = ',';
+    var count = 0;
+    var tableData;
     
     const fd = fs.openSync('../data/studentRecord.csv', 'r');
     fs.readFileSync(fd,'utf8');
 
-    var read = fs.readFileSync('../data/studentRecord.csv');
-    var readData = read.toString();
-
-    var tableData;
-    var str = readData;
-    var delimiter = ',';
-    const row = str.split('\n') ;
+    var readData = (fs.readFileSync('../data/studentRecord.csv')).toString();
+    const row = readData.split('\n') ;
     var title = row[0].split(delimiter);
-    var studentTableData = [];
-    var count = 0;
+    var matchedData = myTableData();
 
-   
-    require('fs').createReadStream("../data/studentRecord.csv")
-    .on('data', function(chunk) {
-        for (var i=0; i < chunk.length; ++i)
-        if (chunk[i] == 10) count++;
-    })
-    .on('end', function() {
-        var rowsNumber = count;
-        tableData = "<!DOCTYPE html>" + 
+    for (var i=0; i < matchedData.length; ++i)
+    if (matchedData[i]) count++;
+    count;
+
+    tableData = "<!DOCTYPE html>" + 
             "<html>" + 
             "<head>" + 
             " <style>"+
             "table {font-family: arial, sans-serif; border-collapse: collapse; width: 100%;}"+
             "td, th { border: 1px solid #dddddd; text-align: left; padding: 8px;}" +
             "tr:nth-child(even) {background-color: #dddddd;}" +
+            ".back{padding:15px 32px;color:white; background-color:rgb(186,121,0); border-radius:50%;font-size:16px; cursor:pointer;}"+
+            "h1{text-align:center;}"+
             "</style>"+
             "<title>Students' details</title>" +
             "<head>" + 
             "<body>" +
-            "<h2>Details About Student </h2>";
-            tableData +=`<h3>Number of rows are: ${rowsNumber}</h3>`+
+            "<h1>Details of Students</h1>";
+            tableData +=`<h2 style="color:blue;text-align:center;">Number of row count: ${count}</h2>`+
             "<table>" + 
             "<tr>";
-        
+           
             for(var titleIndex = 0; titleIndex < title.length; titleIndex++){
                 tableData += `<th>${title[titleIndex]}</th>`;
             }
 
             tableData += "</tr>";    
 
-            for(var rowIndex = 0; rowIndex < studentTableData.length; rowIndex++){
-                table += "<tr>";
-                    
+            for(var rowIndex = 0; rowIndex < matchedData.length; rowIndex++){
+                tableData += "<tr>";
                 for (var colIndex = 0; colIndex < title.length; colIndex++){
-                    table += `<td>${studentTableData[rowIndex][colIndex]} </td>`;
+                    tableData += `<td>${matchedData[rowIndex][colIndex]} </td>`;
                 }//end of col loop
                 tableData += "</tr>";
             }//end of row loop
             tableData += "</tr>" + 
-            '<a href="/start"> <input type="button" class="back" name="back" value="Back to home"> </a>' +             
+            '<a href="/start"> <input type="button" class="back" name="back" value="&laquo; Back to home"></a>' +             
             "</body>" +
             "</html>";
 
-            for(var i=1; i<row.length - 1; i++){
-                var data = studentTableData[i-1] = row[i].split(delimiter);
-                // console.log(data);
-                var dataArr = data[5].split(delimiter);
-                for(var interval=0; interval<row.length; interval += 6 ){
-                    var intervalData = dataArr[interval];
-                    
-                    // console.log(result);
-                    if(`${result.selectDegree}` === intervalData){
-                        console.log("congrats");
-                        response.writeHead( 200, {"Content-Type": "text/html"} );
-                        response.write(tableData);
-                        // timeOut(request, response);
-                        // response.end();
-                    }
-                    else{
-                        // console.log("Sorry data doesn't match");
-                    }
-            
-            
-                }
+            response.writeHead( 200, {"Content-Type": "text/html"} );
+            response.write(tableData);
+            response.end();
+
+    function myTableData()
+    {
+        var studentTableData = [];
+        var tableArray = []; 
+        for(var i=1; i<row.length - 1; i++){
+            var data = studentTableData[i-1] = row[i].split(delimiter);
+            var dataArr = data[5].split(delimiter);
+            for(var interval=0; interval<row.length; interval += 6 ){
+                var intervalData = dataArr[interval];
+                if(`${result.selectDegree}` === intervalData){
+                    tableArray.push(data);
+                }  
             }
-                console.log("here is Interval Data ");
-                console.log(intervalData); 
-    
-    });//end of onEnd
-           
-
-
-// function timeOut(request, response){
-    //     setTimeout(function (){
-    //         start.reqStart(request, response);
-    //     }, 3000);
-    // }  
+        }
+        return tableArray; 
+    } 
 }
 
 //allow access on reqStart & reqUpload to other files
