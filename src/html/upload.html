@@ -70,15 +70,15 @@
             }
         </style>
         <!-- endbuild -->
-        <title>Assignment-1</title>
+        <title>Upload modal</title>
     </head>
 
     <body>
-        <h1>Welcome</h1> 
+        <h1>Welcome to upload modal</h1> 
         <a href="/start"> <input type="button" class="back" name="back" value="&laquo; Back to home"> </a> 
         <hr class="new4">
         <form action="/show" enctype="multipart/form-data" method="post">
-            Choose file from local dir: <input type="file" name="upload" required/>
+            Choose file from local dir: <input type="file" name="upload" multiple = "multiple" required/>
             
             <input type="submit" class="submit" value="Upload file" />
         </form>

@@ -108,6 +108,10 @@ function reqDisplay(request, response, result){
             "<body>" +
             "<h1>Details of Students</h1>";
             tableData +=`<h2 style="color:blue;text-align:center;">Number of row count: ${count}</h2>`+
+//	if(`${count} === '0'`){
+  //              tableData += "<h2 style='color:red;text-align:center;'>No data found with your selected degree!!<br> Try entering different degree!</h2>";
+    //        }
+
             "<table>" + 
             "<tr>";
            

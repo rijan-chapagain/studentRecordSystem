@@ -58,28 +58,22 @@ function reqShow(request, response)
                 "<head>" + 
                 "<style>" + 
                 ".back{padding:15px 32px;color:white; background-color:rgb(186,121,0); border-radius:50%;font-size:16px; cursor:pointer;}"+
-                "h1{text-align:center;}"+
+                "body{text-align:center;}"+
                 "</style>" + 
-                "</head>" + 
-                "<h1>Your seledted image is: </h1>" +
-                "<h3> &#9989; Congrats, your image successfully uploaded.</h3>"+
-
+                "</head>" +
+		"<body>"+ 
+                "<h1>Welcome to show image</h1>" +
                 '<a href="/start"> <input type="button" class="back" name="back" value="&laquo; Back to home"></a>' +       
-                `<h2>Opening up -${fName}- image.</h2>`+
-                // `<img src="/home/rijan/Desktop/ICT375/Assignments/as1/studentRecordSystem/tmp/test.png" />` +
-                // `<img src="../tmp/test.png" />` +
-                // `<img src="/requestHandlers/test.png" />` +
-                
+		"<h3> &#9989; Congrats, your image successfully uploaded.</h3>"+
+                `<h3>Your uploaded file name is: ${fName}</h3>`+
+		"<p>This is one of the famous and beautiful temple of Nepal.(Shambhunath Temple)</p>"+
                 "</body>" +
                 "</html>";
-                
+
             response.writeHead(200, {"Content-Type": "text/html"});
             response.write(body);
-            response.write("<h1>Testetes</h1>");
-
-
+	    response.write("<img src='/dispImage' />");	
             response.end();
-            console.log("after response");
 
         });
     });
@@ -92,12 +86,11 @@ function reqShow(request, response)
  * @param {object} response 
  * @param {object} imagePath 
  */
-function dispImage(request, response, imagePath) 
+function dispImage(request, response) 
 {
-    console.log(imagePath);
-    console.log("Request handler 'dispImage' was called.");
+    console.log("Request handler 'dispImage' is displaying image.");
     response.writeHead(200, {"Content-Type": "image/png"});
-    fs.createReadStream(`../tmp/${imagePath}`).pipe(response);
+    fs.createReadStream(`../img/2.png`).pipe(response);
 }
 
 //allow access on reqStart & reqUpload to other files

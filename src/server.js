@@ -27,7 +27,7 @@ function startServer(route, handle, request)
             
             route(pathname, handle, request, response);
       }
-      http.createServer(onRequest).listen(40310,'localhost');
+      http.createServer(onRequest).listen(40310,'ceto.murdoch.edu.au');
             console.log("Server has started.");
 }
 //allow access to other files
