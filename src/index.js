@@ -6,13 +6,14 @@ var student = require("./requestHandlers/student");
 var view = require("./requestHandlers/view");
 var upload = require("./requestHandlers/upload");
 var imageFolder = require("./requestHandlers/imageFolder");
+var css = require("./requestHandlers/styles.js");
 
 // create ‘handle’ object literal
 var handle = {};
 // using the associative array notation, each array index is an
 // object property which points to an appropriate request handler
 
-handle["/css"] = start.reqCss;
+handle["/css/styles.css"] = css.reqCss;
 handle["/"] = start.reqStart;
 handle["/start"] = start.reqStart;
 handle["/check"] = start.reqCheck;
